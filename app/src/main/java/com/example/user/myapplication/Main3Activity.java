@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class Main3Activity extends AppCompatActivity {
     TextView name, menu1, menu2, menu3, tel, url, regdate;
     ImageView img;
+    //restaurant rest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +26,14 @@ public class Main3Activity extends AppCompatActivity {
     public void onClick(View v){
         Intent intent = getIntent();
         restaurant rest = intent.getParcelableExtra("restaurant");
-
         if(v.getId()==R.id.btnback){
             finish();
         }else if(v.getId()==R.id.imageView2){
-            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:/"+rest.getTel()));
-            startActivity(callIntent);
+            Intent calIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:/" + rest.getTel()));
+            startActivity(calIntent);
         }else if(v.getId()==R.id.imageView3){
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(rest.getAddr()));
-            startActivity(urlIntent);
+            Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+rest.getAddr()));
+            startActivity(viewIntent);
         }
     }
 

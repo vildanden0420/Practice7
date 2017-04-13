@@ -35,15 +35,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View v){
-        Intent intent = new Intent(this, Main2Activity.class);
-        this.startActivityForResult(intent, _REST_REQUEST);
+        if(v.getId() == R.id.b1){
+            Intent intent = new Intent(this, Main2Activity.class);
+            this.startActivityForResult(intent, _REST_REQUEST);
+        }
+
     }
 
     public void init(){
         listView = (ListView)findViewById(R.id.listview);
         tv = (TextView)findViewById(R.id.tv);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, restName);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, restName);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

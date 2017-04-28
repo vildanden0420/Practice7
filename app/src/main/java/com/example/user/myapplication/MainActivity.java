@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> restName = new ArrayList<>();
     ArrayList<restaurant> restList = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    RestAdapter adapter;
 
 
     @Override
@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         if(v.getId() == R.id.b1){
             Intent intent = new Intent(this, Main2Activity.class);
             this.startActivityForResult(intent, _REST_REQUEST);
+        }else if(v.getId() == R.id.b2){
+            adapter.setNameAscSort();
+        }else if(v.getId() == R.id.b3){
+            adapter.setOptionAscSort();
         }
 
     }
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.listview);
         tv = (TextView)findViewById(R.id.tv);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, restName);
+        adapter = new RestAdapter(restList,this);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                                 restList.remove(pos);
                                 restName.remove(pos);
                                 adapter.notifyDataSetChanged();
-                                tv.setText("맛집 리스트(" + restName.size() + "개)");
                             }
                         })
                         .show();
@@ -92,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 this.restList.add(rest);
                 restName.add(rest.getName());
                 adapter.notifyDataSetChanged();
-                tv.setText("맛집 리스트(" + this.restName.size() + "개)");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

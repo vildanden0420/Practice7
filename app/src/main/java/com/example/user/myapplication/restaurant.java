@@ -2,6 +2,7 @@ package com.example.user.myapplication;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.CheckBox;
 
 /**
  * Created by User on 2017-04-12.
@@ -12,6 +13,7 @@ public class restaurant implements Parcelable {
     private String name, tel, addr, date;
     private String[] menu = new String[3];
     private int option;
+    private int c;
 
     protected restaurant(Parcel in) {
         name = in.readString();
@@ -20,6 +22,7 @@ public class restaurant implements Parcelable {
         menu = in.createStringArray();
         date = in.readString();
         option = in.readInt();
+        //c = in.readInt();
     }
 
     public restaurant(String name, String tel, String addr, String[] menu, String date, int option){
@@ -29,6 +32,7 @@ public class restaurant implements Parcelable {
         this.menu = menu;
         this.date = date;
         this.option = option;
+        //this.c = c;
     }
 
     public static final Creator<restaurant> CREATOR = new Creator<restaurant>() {

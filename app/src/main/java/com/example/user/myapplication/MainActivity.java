@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,10 +22,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     static final int _REST_REQUEST = 1;
     ListView listView;
-    //TextView tv;
     EditText editText;
+    Button delete;
 
-    ArrayList<String> restName = new ArrayList<>();
+    //ArrayList<String> restName = new ArrayList<>();
     ArrayList<restaurant> restList = new ArrayList<>();
     RestAdapter adapter;
 
@@ -42,10 +43,50 @@ public class MainActivity extends AppCompatActivity {
         if(v.getId() == R.id.b1){
             Intent intent = new Intent(this, Main2Activity.class);
             this.startActivityForResult(intent, _REST_REQUEST);
+
         }else if(v.getId() == R.id.b2){
             adapter.setNameAscSort();
+
         }else if(v.getId() == R.id.b3){
             adapter.setOptionAscSort();
+
+        }else{
+            if(delete.getText().toString().equals("선택")){
+                delete.setText("삭제");
+                adapter.setCheakable(true);
+                adapter.notifyDataSetChanged();
+            }else{
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+//                dlg.setTitle("삭제확인")
+//                        .setMessage("정말 삭제하시겠습니까?")
+//                        .setIcon(R.drawable.potato)
+//                        .setPositiveButton("취소", null)
+//                        .setNegativeButton("확인", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                for(int i=0; i < restList.size(); i++){
+//                                    if(restList.get(i).getChecked()){
+//                                        restList.remove(i--);
+//                                    }
+//
+//                                }
+//                            }
+//                        }).show();
+                Boolean delcheck=false;
+                for(int i = 0; i<restList.size();i++){
+                    if(restList.get(i).getChecked()){
+                        restList.remove(i--);
+                        delcheck=true;
+                    }
+                }
+
+                if(delcheck)
+                    Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+                delete.setText("선택");
+                adapter.setCheakable(false);
+                adapter.notifyDataSetChanged();
+            }
         }
 
     }
@@ -53,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public void init(){
         listView = (ListView)findViewById(R.id.listview);
         editText = (EditText)findViewById(R.id.editText);
-        //tv = (TextView)findViewById(R.id.tv);
+        delete = (Button)findViewById(R.id.b4);
 
         adapter = new RestAdapter(restList,this);
         listView.setAdapter(adapter);
@@ -86,29 +127,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                final int pos = position;
-                dlg.setTitle("삭제확인")
-                        .setMessage("정말 삭제하시겠습니까?")
-                        .setIcon(R.drawable.potato)
-                        .setPositiveButton("취소", null)
-                        .setNegativeButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                restList.remove(pos);
-                                restName.remove(pos);
-                                adapter.notifyDataSetChanged();
-                            }
-                        })
-                        .show();
-                return true;
-
-            }
-        });
     }
 
     @Override
@@ -117,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 restaurant rest = data.getParcelableExtra("restaurant");
                 this.restList.add(rest);
-                restName.add(rest.getName());
                 adapter.notifyDataSetChanged();
             }
         }

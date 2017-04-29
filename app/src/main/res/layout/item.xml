@@ -11,6 +11,7 @@
         />
 
     <LinearLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -22,19 +23,22 @@
             android:id="@+id/itemName"
             android:text="title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
         <TextView
             android:textSize="15dp"
             android:id="@+id/itemNum"
             android:text="tel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:id="@+id/checkbox"/>
+        android:id="@+id/checkbox"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

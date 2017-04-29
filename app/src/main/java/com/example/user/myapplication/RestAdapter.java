@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -25,6 +26,12 @@ public class RestAdapter extends BaseAdapter implements Filterable{
     ArrayList<restaurant> filteredData;
     Context c;
     Filter listFilter;
+    private Boolean cheakable = false;
+
+
+    public void setCheakable(Boolean cheakable) {
+        this.cheakable = cheakable;
+    }
 
     public RestAdapter(ArrayList<restaurant> data, Context c){
         this.data = data;
@@ -57,9 +64,9 @@ public class RestAdapter extends BaseAdapter implements Filterable{
         TextView name = (TextView)convertView.findViewById(R.id.itemName);
         TextView num = (TextView)convertView.findViewById(R.id.itemNum);
         ImageView img = (ImageView)convertView.findViewById(R.id.itemImg);
-        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.checkbox);
 
-        restaurant restData = filteredData.get(position);
+        final restaurant restData = filteredData.get(position);
 
         name.setText(restData.getName());
         num.setText(restData.getTel());
@@ -71,6 +78,25 @@ public class RestAdapter extends BaseAdapter implements Filterable{
         }else{
             img.setImageResource(R.drawable.hamburger);
         }
+
+        if(cheakable){
+            checkBox.setVisibility(View.VISIBLE);
+        }else{
+            checkBox.setVisibility(View.INVISIBLE);
+            checkBox.setChecked(false);
+        }
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    restData.setChecked(true);
+                }else{
+                    restData.setChecked(false);
+                }
+            }
+        });
+
 
         return convertView;
     }

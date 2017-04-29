@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,23 +20,26 @@ import java.util.Comparator;
  * Created by vil on 2017-04-29.
  */
 
-public class RestAdapter extends BaseAdapter{
+public class RestAdapter extends BaseAdapter implements Filterable{
     ArrayList<restaurant> data;
+    ArrayList<restaurant> filteredData;
     Context c;
+    Filter listFilter;
 
     public RestAdapter(ArrayList<restaurant> data, Context c){
         this.data = data;
         this.c = c;
+        this.filteredData = data;
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return filteredData.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return filteredData.get(position);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class RestAdapter extends BaseAdapter{
         ImageView img = (ImageView)convertView.findViewById(R.id.itemImg);
         CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.checkbox);
 
-        restaurant restData = data.get(position);
+        restaurant restData = filteredData.get(position);
 
         name.setText(restData.getName());
         num.setText(restData.getTel());
@@ -95,4 +100,46 @@ public class RestAdapter extends BaseAdapter{
     }
 
 
+    @Override
+    public Filter getFilter() {
+        if(listFilter == null){
+            listFilter = new ListFilter();
+        }
+        return listFilter;
+    }
+
+    private class ListFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            if(constraint == null || constraint.length()==0){
+                results.values = data;
+                results.count = data.size();
+            }else{
+                ArrayList<restaurant> dataList = new ArrayList<restaurant>();
+
+                for(restaurant item : data){
+                    if(item.getName().toUpperCase().contains(constraint.toString().toUpperCase())){
+                        dataList.add(item);
+                    }
+                }
+
+                results.values = dataList;
+                results.count = dataList.size();
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredData = (ArrayList<restaurant>) results.values;
+
+            if(results.count>0){
+                notifyDataSetChanged();
+            }else{
+                notifyDataSetInvalidated();
+            }
+        }
+    }
 }

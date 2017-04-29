@@ -6,9 +6,12 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +21,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     static final int _REST_REQUEST = 1;
     ListView listView;
-    TextView tv;
+    //TextView tv;
+    EditText editText;
 
     ArrayList<String> restName = new ArrayList<>();
     ArrayList<restaurant> restList = new ArrayList<>();
@@ -48,10 +52,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void init(){
         listView = (ListView)findViewById(R.id.listview);
-        tv = (TextView)findViewById(R.id.tv);
+        editText = (EditText)findViewById(R.id.editText);
+        //tv = (TextView)findViewById(R.id.tv);
 
         adapter = new RestAdapter(restList,this);
         listView.setAdapter(adapter);
+
+        EditText editTextFilter = (EditText)findViewById(R.id.editText);
+        editTextFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String filterText = s.toString();
+                ((RestAdapter)listView.getAdapter()).getFilter().filter(filterText);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
